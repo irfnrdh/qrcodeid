@@ -60,7 +60,7 @@ export interface CodeVariants {
 export interface ValidationResult {
   isValid: boolean;
   error?: string;
-  details?: {
+  details: {
     length: boolean;
     format: boolean;
     checksum?: boolean;
@@ -432,11 +432,21 @@ export function parseQRData(qrData: string): ParsedQRData {
 export function validateQRData(qrData: string): ValidationResult {
   try {
     parseQRData(qrData);
-    return { isValid: true };
+    return { 
+      isValid: true,
+      details: {
+        length: true,
+        format: true
+      }
+    };
   } catch (error) {
     return {
       isValid: false,
-      error: error instanceof Error ? error.message : 'Unknown validation error'
+      error: error instanceof Error ? error.message : 'Unknown validation error',
+      details: {
+        length: false,
+        format: false
+      }
     };
   }
 }
